@@ -1,0 +1,713 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Juego de la Ruleta</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            min-height: 100vh;
+            color: white;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .game-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .game-title {
+            font-size: 3rem;
+            background: linear-gradient(45deg, #ff6b6b, #ffd93d);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .player-section {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .player-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        
+        .input-group label {
+            font-weight: bold;
+            color: #ffd93d;
+        }
+        
+        input {
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.9);
+            color: #333;
+            font-size: 16px;
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(45deg, #ff5252, #ff7979);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255,107,107,0.4);
+        }
+        
+        .btn-success {
+            background: linear-gradient(45deg, #00b894, #00cec9);
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background: linear-gradient(45deg, #00a085, #00b2a9);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,184,148,0.4);
+        }
+        
+        .btn-warning {
+            background: linear-gradient(45deg, #fdcb6e, #f39c12);
+            color: white;
+        }
+        
+        .btn-warning:hover {
+            background: linear-gradient(45deg, #e17055, #d63031);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(253,203,110,0.4);
+        }
+        
+        .roulette-section {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 20px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .roulette-wheel {
+            width: 200px;
+            height: 200px;
+            border: 8px solid #ffd93d;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            background: conic-gradient(
+                red 0deg 18deg,
+                black 18deg 36deg,
+                red 36deg 54deg,
+                black 54deg 72deg,
+                red 72deg 90deg,
+                black 90deg 108deg,
+                red 108deg 126deg,
+                black 126deg 144deg,
+                red 144deg 162deg,
+                black 162deg 180deg,
+                red 180deg 198deg,
+                black 198deg 216deg,
+                red 216deg 234deg,
+                black 234deg 252deg,
+                red 252deg 270deg,
+                black 270deg 288deg,
+                red 288deg 306deg,
+                black 306deg 324deg,
+                red 324deg 342deg,
+                black 342deg 360deg
+            );
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            transition: transform 3s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+        
+        .roulette-center {
+            width: 60px;
+            height: 60px;
+            background: #333;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+            border: 3px solid #ffd93d;
+        }
+        
+        .result-display {
+            margin: 20px 0;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        .result-number {
+            color: #ffd93d;
+            font-size: 2rem;
+        }
+        
+        .betting-section {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .betting-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .bet-option {
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            padding: 15px;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .bet-option:hover {
+            border-color: #ffd93d;
+            transform: translateY(-2px);
+        }
+        
+        .bet-option.selected {
+            border-color: #ff6b6b;
+            background: rgba(255,107,107,0.2);
+        }
+        
+        .bet-details {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 15px 0;
+        }
+        
+        .game-controls {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+        
+        .message {
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .message.success {
+            background: rgba(0,184,148,0.2);
+            border: 2px solid #00b894;
+            color: #00b894;
+        }
+        
+        .message.error {
+            background: rgba(214,48,49,0.2);
+            border: 2px solid #d63031;
+            color: #ff7675;
+        }
+        
+        .message.info {
+            background: rgba(116,185,255,0.2);
+            border: 2px solid #74b9ff;
+            color: #74b9ff;
+        }
+        
+        .balance-display {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #ffd93d;
+        }
+        
+        .specific-bet-inputs {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        @media (max-width: 768px) {
+            .game-title {
+                font-size: 2rem;
+            }
+            
+            .player-info {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .betting-options {
+                grid-template-columns: 1fr;
+            }
+            
+            .game-controls {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <div class="container">
+            <header class="game-header">
+                <h1 class="game-title">🎰 RULETA CASINO 🎰</h1>
+                <p>¡Prueba tu suerte en la ruleta!</p>
+            </header>
+
+            <!-- Sección del Jugador -->
+            <section class="player-section">
+                <div class="player-info">
+                    <div class="input-group">
+                        <label>Nombre del Jugador:</label>
+                        <input v-model="playerName" type="text" placeholder="Ingresa tu nombre" :disabled="gameStarted && !gameEnded">
+                    </div>
+                    <div class="input-group" v-if="!gameStarted">
+                        <label>Saldo Inicial:</label>
+                        <input v-model.number="initialBalance" type="number" min="1" placeholder="Saldo inicial">
+                    </div>
+                    <div class="balance-display" v-if="gameStarted">
+                        Saldo: ${{ currentBalance }}
+                    </div>
+                </div>
+                
+                <div class="game-controls">
+                    <button v-if="!gameStarted" @click="startNewGame" class="btn btn-primary" :disabled="!playerName || !initialBalance">
+                        🎮 Nuevo Juego
+                    </button>
+                    <button v-if="!gameStarted" @click="loadPlayer" class="btn btn-warning" :disabled="!playerName">
+                        📂 Cargar Jugador
+                    </button>
+                    <button v-if="gameStarted && currentBalance !== savedBalance" @click="saveGame" class="btn btn-success">
+                        💾 Guardar Partida
+                    </button>
+                </div>
+            </section>
+
+            <!-- Sección de la Ruleta -->
+            <section class="roulette-section" v-if="gameStarted">
+                <h2>🎯 Ruleta</h2>
+                <div class="roulette-wheel" :style="{ transform: `rotate(${wheelRotation}deg)` }">
+                    <div class="roulette-center">{{ lastResult.number || '?' }}</div>
+                </div>
+                
+                <div class="result-display" v-if="lastResult.number !== null">
+                    <div>Resultado: <span class="result-number">{{ lastResult.number }}</span></div>
+                    <div>Color: <span :style="{ color: lastResult.color }">{{ lastResult.color === 'red' ? '🔴 Rojo' : '⚫ Negro' }}</span></div>
+                    <div>{{ lastResult.number % 2 === 0 ? '🟦 Par' : '🟨 Impar' }}</div>
+                </div>
+            </section>
+
+            <!-- Sección de Apuestas -->
+            <section class="betting-section" v-if="gameStarted && !spinning">
+                <h2>💰 Realizar Apuesta</h2>
+                
+                <div class="bet-details">
+                    <div class="input-group">
+                        <label>Monto de la Apuesta:</label>
+                        <input v-model.number="betAmount" type="number" min="1" :max="currentBalance" placeholder="Cantidad a apostar">
+                    </div>
+                </div>
+
+                <div class="betting-options">
+                    <div class="bet-option" :class="{ selected: betType === 'color' }" @click="selectBetType('color')">
+                        <h3>🎨 Apostar por Color</h3>
+                        <p>Gana la mitad de tu apuesta</p>
+                        <div v-if="betType === 'color'">
+                            <select v-model="betColor">
+                                <option value="red">🔴 Rojo</option>
+                                <option value="black">⚫ Negro</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="bet-option" :class="{ selected: betType === 'parity' }" @click="selectBetType('parity')">
+                        <h3>🔢 Par/Impar por Color</h3>
+                        <p>Gana el mismo monto apostado</p>
+                        <div v-if="betType === 'parity'">
+                            <select v-model="betColor">
+                                <option value="red">🔴 Rojo</option>
+                                <option value="black">⚫ Negro</option>
+                            </select>
+                            <select v-model="betParity">
+                                <option value="even">🟦 Par</option>
+                                <option value="odd">🟨 Impar</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="bet-option" :class="{ selected: betType === 'specific' }" @click="selectBetType('specific')">
+                        <h3>🎯 Número y Color Específico</h3>
+                        <p>Gana el triple de tu apuesta</p>
+                        <div v-if="betType === 'specific'" class="specific-bet-inputs">
+                            <input v-model.number="betNumber" type="number" min="0" max="36" placeholder="Número (0-36)">
+                            <select v-model="betColor">
+                                <option value="red">🔴 Rojo</option>
+                                <option value="black">⚫ Negro</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="game-controls">
+                    <button @click="placeBet" class="btn btn-primary" :disabled="!canPlaceBet">
+                        🎲 Girar Ruleta
+                    </button>
+                </div>
+            </section>
+
+            <!-- Mensajes -->
+            <div v-if="message" class="message" :class="message.type">
+                {{ message.text }}
+            </div>
+
+            <!-- Indicador de giro -->
+            <div v-if="spinning" class="message info">
+                🎪 ¡La ruleta está girando...!
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const { createApp } = Vue;
+
+        createApp({
+            data() {
+                return {
+                    // Estado del juego
+                    gameStarted: false,
+                    gameEnded: false,
+                    spinning: false,
+                    
+                    // Información del jugador
+                    playerName: '',
+                    initialBalance: 1000,
+                    currentBalance: 0,
+                    savedBalance: 0,
+                    
+                    // Apuesta
+                    betType: '',
+                    betAmount: 0,
+                    betColor: 'red',
+                    betParity: 'even',
+                    betNumber: 0,
+                    
+                    // Resultado
+                    lastResult: {
+                        number: null,
+                        color: null
+                    },
+                    wheelRotation: 0,
+                    
+                    // Mensajes
+                    message: null,
+                    
+                    // API Base URL
+                    apiUrl: 'http://localhost:5000/api'
+                }
+            },
+            computed: {
+                canPlaceBet() {
+                    return this.betType && this.betAmount > 0 && this.betAmount <= this.currentBalance && this.isValidBet();
+                }
+            },
+            methods: {
+                startNewGame() {
+                    if (!this.playerName || !this.initialBalance) {
+                        this.showMessage('Por favor ingresa tu nombre y saldo inicial', 'error');
+                        return;
+                    }
+                    
+                    this.gameStarted = true;
+                    this.gameEnded = false;
+                    this.currentBalance = this.initialBalance;
+                    this.savedBalance = this.initialBalance;
+                    this.showMessage(`¡Bienvenido ${this.playerName}! El juego ha comenzado.`, 'success');
+                },
+
+                async loadPlayer() {
+                    if (!this.playerName) {
+                        this.showMessage('Por favor ingresa un nombre de jugador', 'error');
+                        return;
+                    }
+
+                    try {
+                        const response = await fetch(`${this.apiUrl}/user/${encodeURIComponent(this.playerName)}`);
+                        
+                        if (response.ok) {
+                            const playerData = await response.json();
+                            this.currentBalance = playerData.balance;
+                            this.savedBalance = playerData.balance;
+                            this.gameStarted = true;
+                            this.gameEnded = false;
+                            this.showMessage(`Jugador ${this.playerName} cargado con saldo: ${this.currentBalance}`, 'success');
+                        } else if (response.status === 404) {
+                            this.showMessage('Jugador no encontrado. Iniciando juego nuevo.', 'info');
+                            this.initialBalance = 1000;
+                            this.startNewGame();
+                        } else {
+                            throw new Error('Error en la respuesta del servidor');
+                        }
+                    } catch (error) {
+                        console.error('Error cargando jugador:', error);
+                        this.showMessage('Error al cargar el jugador. Usando modo offline.', 'error');
+                        const savedData = localStorage.getItem(`player_${this.playerName.toLowerCase()}`);
+                        if (savedData) {
+                            const playerData = JSON.parse(savedData);
+                            this.currentBalance = playerData.balance;
+                            this.savedBalance = playerData.balance;
+                            this.gameStarted = true;
+                            this.gameEnded = false;
+                            this.showMessage(`Jugador ${this.playerName} cargado desde cache local`, 'info');
+                        } else {
+                            this.initialBalance = 1000;
+                            this.startNewGame();
+                        }
+                    }
+                },
+
+                async saveGame() {
+                    try {
+                        const balanceDifference = this.currentBalance - this.savedBalance;
+                        
+                        const response = await fetch(`${this.apiUrl}/user/save-balance`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                name: this.playerName,
+                                amount: balanceDifference
+                            })
+                        });
+
+                        if (response.ok) {
+                            this.savedBalance = this.currentBalance;
+                            this.showMessage('Partida guardada exitosamente', 'success');
+                        } else {
+                            throw new Error('Error en la respuesta del servidor');
+                        }
+                    } catch (error) {
+                        console.error('Error guardando partida:', error);
+                        this.showMessage('Error al guardar en servidor. Guardando localmente.', 'error');
+                        
+                        const playerData = {
+                            name: this.playerName.toLowerCase(),
+                            balance: this.currentBalance
+                        };
+                        
+                        localStorage.setItem(`player_${this.playerName.toLowerCase()}`, JSON.stringify(playerData));
+                        this.savedBalance = this.currentBalance;
+                        this.showMessage('Partida guardada localmente', 'info');
+                    }
+                },
+
+                selectBetType(type) {
+                    this.betType = type;
+                    if (type !== 'specific') {
+                        this.betNumber = 0;
+                    }
+                },
+
+                isValidBet() {
+                    switch (this.betType) {
+                        case 'color':
+                            return this.betColor;
+                        case 'parity':
+                            return this.betColor && this.betParity;
+                        case 'specific':
+                            return this.betNumber >= 0 && this.betNumber <= 36 && this.betColor;
+                        default:
+                            return false;
+                    }
+                },
+
+                async placeBet() {
+                    if (!this.canPlaceBet) {
+                        this.showMessage('Apuesta inválida', 'error');
+                        return;
+                    }
+
+                    this.spinning = true;
+                    this.message = null;
+
+                    try {
+                        await this.spinRoulette();
+                        const result = await this.getRouletteResult();
+                        this.lastResult = result;
+                        const prize = await this.calculatePrize(result);
+                        
+                        this.currentBalance += prize - this.betAmount;
+
+                        if (prize > 0) {
+                            this.showMessage(`¡Ganaste! Premio: ${prize}`, 'success');
+                        } else {
+                            this.showMessage(`No ganaste esta vez. Perdiste: ${this.betAmount}`, 'error');
+                        }
+
+                        if (this.currentBalance <= 0) {
+                            this.gameEnded = true;
+                            this.showMessage('¡Se acabó tu saldo! Juego terminado.', 'error');
+                        }
+
+                    } catch (error) {
+                        console.error('Error en la apuesta:', error);
+                        this.showMessage('Error al procesar la apuesta', 'error');
+                    } finally {
+                        this.spinning = false;
+                        this.resetBet();
+                    }
+                },
+
+                async spinRoulette() {
+                    return new Promise(resolve => {
+                        const spins = 5 + Math.random() * 5;
+                        const finalRotation = this.wheelRotation + (spins * 360) + (Math.random() * 360);
+                        this.wheelRotation = finalRotation;
+                        setTimeout(resolve, 3000);
+                    });
+                },
+
+                async getRouletteResult() {
+                    try {
+                        const response = await fetch(`${this.apiUrl}/roulette/spin`);
+                        if (response.ok) {
+                            const result = await response.json();
+                            return result;
+                        } else {
+                            throw new Error('Error obteniendo resultado de la ruleta');
+                        }
+                    } catch (error) {
+                        console.error('Error llamando API:', error);
+                        const number = Math.floor(Math.random() * 37);
+                        const color = Math.random() < 0.5 ? 'red' : 'black';
+                        return { number, color };
+                    }
+                },
+
+                async calculatePrize(result) {
+                    try {
+                        const betRequest = {
+                            betType: this.betType,
+                            betAmount: this.betAmount,
+                            color: this.betColor,
+                            parity: this.betParity,
+                            number: this.betNumber,
+                            resultNumber: result.number,
+                            resultColor: result.color
+                        };
+
+                        const response = await fetch(`${this.apiUrl}/roulette/calculate-prize`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify(betRequest)
+                        });
+
+                        if (response.ok) {
+                            const prizeData = await response.json();
+                            return prizeData.prize;
+                        } else {
+                            throw new Error('Error calculando el premio');
+                        }
+                    } catch (error) {
+                        console.error('Error calculando premio:', error);
+                        let prize = 0;
+                        
+                        switch (this.betType) {
+                            case 'color':
+                                if (result.color === this.betColor) {
+                                    prize = this.betAmount * 0.5;
+                                }
+                                break;
+                            case 'parity':
+                                const isEven = result.number % 2 === 0;
+                                const betIsEven = this.betParity === 'even';
+                                if (result.color === this.betColor && isEven === betIsEven) {
+                                    prize = this.betAmount;
+                                }
+                                break;
+                            case 'specific':
+                                if (result.number === this.betNumber && result.color === this.betColor) {
+                                    prize = this.betAmount * 3;
+                                }
+                                break;
+                        }
+                        
+                        return prize;
+                    }
+                },
+
+                resetBet() {
+                    this.betType = '';
+                    this.betAmount = 0;
+                    this.betColor = 'red';
+                    this.betParity = 'even';
+                    this.betNumber = 0;
+                },
+
+                showMessage(text, type) {
+                    this.message = { text, type };
+                    setTimeout(() => {
+                        this.message = null;
+                    }, 5000);
+                }
+            }
+        }).mount('#app');
+    </script>
+</body>
+</html>
