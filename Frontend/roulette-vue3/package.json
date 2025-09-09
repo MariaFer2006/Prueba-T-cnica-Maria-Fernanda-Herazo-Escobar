@@ -1,0 +1,19 @@
+{
+  "name": "roulette-game-unilink",
+  "version": "1.0.0",
+  "description": "Juego de ruleta para prueba técnica de Unilink",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "axios": "^1.11.0",
+    "vue": "^3.3.4"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^4.2.3",
+    "vite": "^4.4.5"
+  }
+}

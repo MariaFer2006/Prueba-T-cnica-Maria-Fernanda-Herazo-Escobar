@@ -1,4 +1,6 @@
-﻿# .NET
+﻿# ==========================
+# .NET / C#
+# ==========================
 bin/
 obj/
 *.user
@@ -15,14 +17,31 @@ obj/
 *.sqlite
 *.sqlite3
 
-# Entity Framework
-Migrations/
-
 # Logs
 *.log
 logs/
 
-# OS generated files
+# Entity Framework (si quieres ignorar migraciones)
+# ⚠️ Si quieres mostrar tu BD, elimina esta línea
+Migrations/
+
+# ==========================
+# Node.js / Vue
+# ==========================
+node_modules/
+dist/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.vite/
+.cache/
+
+# ==========================
+# IDE / OS
+# ==========================
+.vscode/
+.idea/
 .DS_Store
 .DS_Store?
 ._*
@@ -30,10 +49,6 @@ logs/
 .Trashes
 ehthumbs.db
 Thumbs.db
-
-# Visual Studio
-.vscode/
-*.sln
 
 # Temporary files
 tmp/

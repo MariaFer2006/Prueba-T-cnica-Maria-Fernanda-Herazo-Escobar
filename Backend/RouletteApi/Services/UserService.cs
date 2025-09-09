@@ -1,50 +1,27 @@
-using Microsoft.EntityFrameworkCore;
-using RouletteApi.Data;
-using RouletteApi.Models;
-
-namespace RouletteApi.Services
+public async Task<User> SaveOrUpdateUserBalanceAsync(string name, decimal finalBalance)
 {
-    public class UserService : IUserService
+    var existingUser = await GetUserByNameAsync(name);
+
+    if (existingUser != null)
     {
-        private readonly RouletteContext _context;
-
-        public UserService(RouletteContext context)
-        {
-            _context = context;
-        }
-
-        public async Task<User?> GetUserByNameAsync(string name)
-        {
-            return await _context.Users
-                .FirstOrDefaultAsync(u => u.Name.ToLower() == name.ToLower());
-        }
-
-        public async Task<User> SaveOrUpdateUserBalanceAsync(string name, decimal amount)
-        {
-            var existingUser = await GetUserByNameAsync(name);
-
-            if (existingUser != null)
-            {
-                // Usuario existe, actualizar saldo
-                existingUser.Balance += amount;
-                existingUser.UpdatedAt = DateTime.UtcNow;
-                _context.Users.Update(existingUser);
-            }
-            else
-            {
-                // Usuario nuevo, crear registro
-                existingUser = new User
-                {
-                    Name = name,
-                    Balance = amount,
-                    CreatedAt = DateTime.UtcNow,
-                    UpdatedAt = DateTime.UtcNow
-                };
-                _context.Users.Add(existingUser);
-            }
-
-            await _context.SaveChangesAsync();
-            return existingUser;
-        }
+        // Sobrescribimos con el saldo final que manda el frontend
+        existingUser.Balance = finalBalance;
+        existingUser.UpdatedAt = DateTime.UtcNow;
+        _context.Users.Update(existingUser);
     }
+    else
+    {
+        // Usuario nuevo → creamos con el saldo inicial
+        existingUser = new User
+        {
+            Name = name,
+            Balance = finalBalance,
+            CreatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow
+        };
+        _context.Users.Add(existingUser);
+    }
+
+    await _context.SaveChangesAsync();
+    return existingUser;
 }

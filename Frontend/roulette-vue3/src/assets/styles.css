@@ -1,0 +1,680 @@
+/* styles.css - Diseño Responsive para Juego de Ruleta */
+
+/* Variables CSS para consistencia */
+:root {
+  --primary-color: #1a1a2e;
+  --secondary-color: #16213e;
+  --accent-color: #0f3460;
+  --gold-color: #ffd700;
+  --red-color: #dc3545;
+  --green-color: #28a745;
+  --text-light: #ffffff;
+  --text-dark: #333333;
+  --border-radius: 12px;
+  --shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  --gradient-bg: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+}
+
+/* Reset y configuración base */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: var(--gradient-bg);
+  color: var(--text-light);
+  min-height: 100vh;
+  line-height: 1.6;
+}
+
+/* Contenedor principal */
+.game-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 20px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Header */
+.game-header {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  padding: 20px;
+  border-radius: var(--border-radius);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  text-align: center;
+}
+
+.game-title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+  background: linear-gradient(45deg, var(--gold-color), #fff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.game-subtitle {
+  font-size: 1.1rem;
+  opacity: 0.8;
+}
+
+/* Layout principal - Grid responsivo */
+.game-layout {
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr;
+  gap: 20px;
+  flex: 1;
+}
+
+/* Sección del jugador */
+.player-section {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-radius: var(--border-radius);
+  padding: 25px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  height: fit-content;
+}
+
+.player-section h3 {
+  margin-bottom: 20px;
+  color: var(--gold-color);
+  font-size: 1.3rem;
+}
+
+.player-info {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.balance-display {
+  background: var(--accent-color);
+  padding: 15px;
+  border-radius: 8px;
+  text-align: center;
+  border: 2px solid var(--gold-color);
+}
+
+.balance-amount {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--gold-color);
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.input-group label {
+  font-weight: 500;
+  color: var(--text-light);
+}
+
+.input-field {
+  padding: 12px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-light);
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.input-field:focus {
+  outline: none;
+  border-color: var(--gold-color);
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+}
+
+.input-field::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* Sección central - Ruleta y controles */
+.game-center {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.roulette-section {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-radius: var(--border-radius);
+  padding: 30px;
+  text-align: center;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.roulette-wheel {
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background: conic-gradient(
+    from 0deg,
+    #dc3545 0deg 10deg,
+    #000 10deg 20deg,
+    #dc3545 20deg 30deg,
+    #000 30deg 40deg,
+    #dc3545 40deg 50deg,
+    #000 50deg 60deg,
+    #dc3545 60deg 70deg,
+    #000 70deg 80deg,
+    #dc3545 80deg 90deg,
+    #000 90deg 100deg,
+    #dc3545 100deg 110deg,
+    #000 110deg 120deg,
+    #dc3545 120deg 130deg,
+    #000 130deg 140deg,
+    #dc3545 140deg 150deg,
+    #000 150deg 160deg,
+    #dc3545 160deg 170deg,
+    #000 170deg 180deg,
+    #dc3545 180deg 190deg,
+    #000 190deg 200deg,
+    #dc3545 200deg 210deg,
+    #000 210deg 220deg,
+    #dc3545 220deg 230deg,
+    #000 230deg 240deg,
+    #dc3545 240deg 250deg,
+    #000 250deg 260deg,
+    #dc3545 260deg 270deg,
+    #000 270deg 280deg,
+    #dc3545 280deg 290deg,
+    #000 290deg 300deg,
+    #dc3545 300deg 310deg,
+    #000 310deg 320deg,
+    #dc3545 320deg 330deg,
+    #000 330deg 340deg,
+    #dc3545 340deg 350deg,
+    #000 350deg 360deg
+  );
+  margin: 0 auto 20px;
+  position: relative;
+  border: 8px solid var(--gold-color);
+  box-shadow: var(--shadow);
+  transition: transform 3s cubic-bezier(0.17, 0.67, 0.12, 0.99);
+}
+
+.roulette-wheel::after {
+  content: '';
+  position: absolute;
+  top: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 15px solid transparent;
+  border-right: 15px solid transparent;
+  border-top: 30px solid var(--gold-color);
+  z-index: 10;
+}
+
+.roulette-wheel.spinning {
+  transform: rotate(1800deg);
+}
+
+.wheel-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 60px;
+  height: 60px;
+  background: var(--gold-color);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--text-dark);
+  z-index: 5;
+}
+
+.result-display {
+  background: var(--secondary-color);
+  padding: 20px;
+  border-radius: 8px;
+  margin-top: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.result-number {
+  font-size: 3rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.result-details {
+  display: flex;
+  justify-content: space-around;
+  gap: 20px;
+}
+
+.result-item {
+  padding: 10px 15px;
+  border-radius: 8px;
+  font-weight: bold;
+}
+
+.result-item.red {
+  background: var(--red-color);
+}
+
+.result-item.black {
+  background: #000;
+}
+
+.result-item.even,
+.result-item.odd {
+  background: var(--accent-color);
+}
+
+/* Sección de apuestas */
+.betting-section {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-radius: var(--border-radius);
+  padding: 25px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  height: fit-content;
+}
+
+.betting-section h3 {
+  margin-bottom: 20px;
+  color: var(--gold-color);
+  font-size: 1.3rem;
+}
+
+.betting-options {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.bet-type {
+  background: var(--secondary-color);
+  padding: 15px;
+  border-radius: 8px;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.bet-type:hover {
+  border-color: var(--gold-color);
+  transform: translateY(-2px);
+}
+
+.bet-type.active {
+  border-color: var(--gold-color);
+  background: var(--accent-color);
+}
+
+.bet-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.bet-option {
+  padding: 8px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text-light);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.bet-option:hover,
+.bet-option.selected {
+  background: var(--gold-color);
+  color: var(--text-dark);
+  border-color: var(--gold-color);
+}
+
+.bet-option.red {
+  background: var(--red-color);
+}
+
+.bet-option.black {
+  background: #000;
+}
+
+/* Controles del juego */
+.game-controls {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-radius: var(--border-radius);
+  padding: 25px;
+  text-align: center;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Botones */
+.btn {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-block;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.btn:hover::before {
+  left: 100%;
+}
+
+.btn-primary {
+  background: var(--gold-color);
+  color: var(--text-dark);
+}
+
+.btn-primary:hover {
+  background: #e6c200;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4);
+}
+
+.btn-success {
+  background: var(--green-color);
+  color: var(--text-light);
+}
+
+.btn-success:hover {
+  background: #218838;
+  transform: translateY(-2px);
+}
+
+.btn-danger {
+  background: var(--red-color);
+  color: var(--text-light);
+}
+
+.btn-danger:hover {
+  background: #c82333;
+  transform: translateY(-2px);
+}
+
+.btn-secondary {
+  background: var(--accent-color);
+  color: var(--text-light);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.btn-secondary:hover {
+  background: var(--secondary-color);
+  border-color: var(--gold-color);
+  transform: translateY(-2px);
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+.btn-group {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* Notificaciones */
+.notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 15px 20px;
+  border-radius: 8px;
+  color: white;
+  font-weight: 500;
+  z-index: 1000;
+  transform: translateX(400px);
+  transition: transform 0.3s ease;
+}
+
+.notification.show {
+  transform: translateX(0);
+}
+
+.notification.success {
+  background: var(--green-color);
+}
+
+.notification.error {
+  background: var(--red-color);
+}
+
+.notification.info {
+  background: var(--accent-color);
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .game-layout {
+    grid-template-columns: 1fr 1.5fr 1fr;
+    gap: 15px;
+  }
+  
+  .roulette-wheel {
+    width: 250px;
+    height: 250px;
+  }
+  
+  .game-title {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 992px) {
+  .game-layout {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .game-container {
+    padding: 15px;
+  }
+  
+  .roulette-wheel {
+    width: 280px;
+    height: 280px;
+  }
+  
+  .result-details {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .btn-group {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 768px) {
+  .game-container {
+    padding: 10px;
+  }
+  
+  .game-title {
+    font-size: 1.8rem;
+  }
+  
+  .roulette-wheel {
+    width: 220px;
+    height: 220px;
+  }
+  
+  .player-section,
+  .betting-section,
+  .game-controls,
+  .roulette-section {
+    padding: 20px;
+  }
+  
+  .bet-options {
+    justify-content: center;
+  }
+  
+  .balance-amount {
+    font-size: 1.3rem;
+  }
+  
+  .result-number {
+    font-size: 2.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .game-container {
+    padding: 8px;
+    gap: 15px;
+  }
+  
+  .game-title {
+    font-size: 1.5rem;
+  }
+  
+  .roulette-wheel {
+    width: 180px;
+    height: 180px;
+  }
+  
+  .player-section,
+  .betting-section,
+  .game-controls,
+  .roulette-section {
+    padding: 15px;
+  }
+  
+  .btn {
+    padding: 10px 20px;
+    font-size: 0.9rem;
+  }
+  
+  .result-number {
+    font-size: 2rem;
+  }
+  
+  .wheel-center {
+    width: 40px;
+    height: 40px;
+    font-size: 1.2rem;
+  }
+  
+  .notification {
+    right: 10px;
+    left: 10px;
+    transform: translateY(-100px);
+  }
+  
+  .notification.show {
+    transform: translateY(0);
+  }
+}
+
+/* Animaciones adicionales */
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(255, 215, 0, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 215, 0, 0);
+  }
+}
+
+.btn-primary:hover {
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.game-container > * {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.game-container > *:nth-child(2) {
+  animation-delay: 0.1s;
+}
+
+.game-container > *:nth-child(3) {
+  animation-delay: 0.2s;
+}
+
+/* Efectos de glassmorfismo mejorados */
+.player-section,
+.betting-section,
+.game-controls,
+.roulette-section,
+.game-header {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+}
+
+/* Estados de carga */
+.loading {
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.loading .roulette-wheel {
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
