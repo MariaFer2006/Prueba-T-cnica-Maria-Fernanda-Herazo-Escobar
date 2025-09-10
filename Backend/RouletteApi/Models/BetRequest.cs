@@ -8,7 +8,7 @@ namespace RouletteApi.Models
         public string BetType { get; set; } = string.Empty; // "color", "parity", "specific"
         
         [Required]
-        [Range(1, double.MaxValue, ErrorMessage = "El monto debe ser mayor a 0")]
+        [Range(0.01, double.MaxValue, ErrorMessage = "El monto debe ser mayor a 0")]
         public decimal BetAmount { get; set; }
         
         public string? Color { get; set; } // "red" or "black"
@@ -16,6 +16,7 @@ namespace RouletteApi.Models
         public int? Number { get; set; } // 0-36
         
         [Required]
+        [Range(0, 36, ErrorMessage = "El número debe estar entre 0 y 36")]
         public int ResultNumber { get; set; } // Número obtenido de la ruleta
         
         [Required]

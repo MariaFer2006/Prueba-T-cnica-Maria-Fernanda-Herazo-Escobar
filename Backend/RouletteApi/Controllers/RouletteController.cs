@@ -55,5 +55,51 @@ namespace RouletteApi.Controllers
                 return StatusCode(500, new { message = "Error calculando el premio", error = ex.Message });
             }
         }
+
+        /// <summary>
+        /// Procesa una apuesta completa: calcula premio y actualiza saldo del usuario
+        /// </summary>
+        [HttpPost("place-bet")]
+        public async Task<ActionResult> PlaceBet([FromBody] PlaceBetRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                // Verificar que el usuario existe y tiene saldo suficiente
+                var user = await _userService.GetUserByNameAsync(request.UserName);
+                if (user == null)
+                {
+                    return NotFound(new { message = "Usuario no encontrado" });
+                }
+
+                if (user.Balance < request.BetRequest.BetAmount)
+                {
+                    return BadRequest(new { message = "Saldo insuficiente" });
+                }
+
+                // Calcular premio
+                var prize = _rouletteService.CalculatePrize(request.BetRequest);
+
+                // Actualizar saldo del usuario
+                var updatedUser = await _userService.UpdateUserBalanceAfterBetAsync(
+                    request.UserName, 
+                    request.BetRequest.BetAmount, 
+                    prize);
+
+                return Ok(new { 
+                    prize = prize, 
+                    newBalance = updatedUser.Balance,
+                    won = prize > 0
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Error procesando la apuesta", error = ex.Message });
+            }
+        }
     }
 }

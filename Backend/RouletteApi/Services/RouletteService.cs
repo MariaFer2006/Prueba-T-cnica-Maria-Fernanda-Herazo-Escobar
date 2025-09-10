@@ -1,11 +1,13 @@
 using RouletteApi.Models;
-using RouletteApi.Services;
 
 namespace RouletteApi.Services
 {
     public class RouletteService : IRouletteService
     {
         private readonly Random _random;
+        
+        // Números rojos en la ruleta europea
+        private readonly int[] _redNumbers = { 1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36 };
 
         public RouletteService()
         {
@@ -15,7 +17,7 @@ namespace RouletteApi.Services
         public RouletteResult SpinRoulette()
         {
             var number = _random.Next(0, 37); // 0-36
-            var color = _random.Next(0, 2) == 0 ? "red" : "black";
+            var color = GetColorForNumber(number);
 
             return new RouletteResult
             {
@@ -38,26 +40,36 @@ namespace RouletteApi.Services
                     break;
 
                 case "parity":
-                    var isResultEven = betRequest.ResultNumber % 2 == 0;
-                    var betIsEven = string.Equals(betRequest.Parity, "even", StringComparison.OrdinalIgnoreCase);
-                    
-                    if (string.Equals(betRequest.ResultColor, betRequest.Color, StringComparison.OrdinalIgnoreCase) 
-                        && isResultEven == betIsEven)
+                    // El 0 no cuenta como par o impar en la ruleta
+                    if (betRequest.ResultNumber != 0)
                     {
-                        prize = betRequest.BetAmount; // Gana el mismo monto apostado
+                        var isResultEven = betRequest.ResultNumber % 2 == 0;
+                        var betIsEven = string.Equals(betRequest.Parity, "even", StringComparison.OrdinalIgnoreCase);
+                        
+                        if (isResultEven == betIsEven)
+                        {
+                            prize = betRequest.BetAmount; // Gana el mismo monto apostado
+                        }
                     }
                     break;
 
                 case "specific":
-                    if (betRequest.ResultNumber == betRequest.Number 
-                        && string.Equals(betRequest.ResultColor, betRequest.Color, StringComparison.OrdinalIgnoreCase))
+                    if (betRequest.ResultNumber == betRequest.Number)
                     {
-                        prize = betRequest.BetAmount * 3; // Gana el triple del monto apostado
+                        prize = betRequest.BetAmount * 35; // Pago 35:1 para números específicos
                     }
                     break;
             }
 
             return prize;
+        }
+
+        private string GetColorForNumber(int number)
+        {
+            if (number == 0)
+                return "green";
+            
+            return _redNumbers.Contains(number) ? "red" : "black";
         }
     }
 }
