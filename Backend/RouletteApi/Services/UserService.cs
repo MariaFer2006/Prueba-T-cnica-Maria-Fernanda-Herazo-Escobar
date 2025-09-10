@@ -31,12 +31,13 @@ namespace RouletteApi.Services
             }
             else
             {
+                var now = DateTime.UtcNow;
                 existingUser = new User
                 {
                     Name = name,
                     Balance = amount,
-                    CreatedAt = DateTime.UtcNow,
-                    UpdatedAt = DateTime.UtcNow
+                    CreatedAt = now,
+                    UpdatedAt = now
                 };
                 _context.Users.Add(existingUser);
             }

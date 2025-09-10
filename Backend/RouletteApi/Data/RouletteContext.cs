@@ -5,7 +5,9 @@ namespace RouletteApi.Data
 {
     public class RouletteContext : DbContext
     {
-        public RouletteContext(DbContextOptions<RouletteContext> options) : base(options) { }
+        public RouletteContext(DbContextOptions<RouletteContext> options) : base(options)
+        {
+        }
 
         public DbSet<User> Users { get; set; }
 
@@ -13,32 +15,25 @@ namespace RouletteApi.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            // Índice único case-insensitive
+            // Configurar el índice único para el nombre (case-insensitive)
             modelBuilder.Entity<User>()
                 .HasIndex(u => u.Name)
-                .IsUnique()
-                .HasDatabaseName("IX_User_Name");
+                .IsUnique();
 
-            modelBuilder.Entity<User>()
-                .Property(u => u.Name)
-                .IsRequired()
-                .HasMaxLength(100)
-                .UseCollation("SQL_Latin1_General_CP1_CI_AS");
-
-            // Timestamps automáticos
-            modelBuilder.Entity<User>()
-                .Property(u => u.CreatedAt)
-                .HasDefaultValueSql("GETDATE()");
-
-            modelBuilder.Entity<User>()
-                .Property(u => u.UpdatedAt)
-                .HasDefaultValueSql("GETDATE()")
-                .ValueGeneratedOnAddOrUpdate();
-
-            // Balance
+            // Configurar precision para decimal
             modelBuilder.Entity<User>()
                 .Property(u => u.Balance)
                 .HasPrecision(18, 2);
+
+            // Configurar valores por defecto para las fechas
+            modelBuilder.Entity<User>()
+                .Property(u => u.CreatedAt)
+                .HasDefaultValueSql("GETUTCDATE()");
+
+            modelBuilder.Entity<User>()
+                .Property(u => u.UpdatedAt)
+                .HasDefaultValueSql("GETUTCDATE()")
+                .ValueGeneratedOnAddOrUpdate();
         }
     }
 }
